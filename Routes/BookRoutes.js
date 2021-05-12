@@ -8,8 +8,6 @@ const uploadfile = require('../MiddleWare/uploadFile.js');
 const upload = require('../MiddleWare/upload');
 
 router.post('/upload/book',
-auth.varifyUser,
-auth.varifyAdmin,
     (req, res) => {
             var post_data = req.body;
             var book = "nobook";
@@ -45,8 +43,34 @@ auth.varifyAdmin,(req, res) => {
         else {
             const id = req.params.id
             cover_page = req.file.filename
-            console.log(cover_page)
+            // console.log(cover_page)
             Book.updateOne({ _id: id }, { cover_page: cover_page }).then(function () {
+                res.status(200).json({ success: true, msg: "Done" })
+            }).catch(function (e) {
+                res.status(201).json({ success: false, msg: "not register" })
+            })
+        }
+    })
+})
+
+router.put("/upload/book/:id", auth.varifyUser,auth.varifyAdmin, (req, res) => {
+    const id = req.params.id
+    console.log("Now")
+    uploadfile(req, res, function (err) {
+        console.log(id)
+        if (err instanceof multer.MulterError) {
+            // A Multer error occurred when uploading.
+            res.status(201).json({ success: false, msg: "error" })
+        }
+        else if (err) {
+
+            res.status(201).json({ success: false, msg: "not gonna happen" })
+        }
+        else {
+            const id = req.params.id
+            console.log("hello")
+            book = req.file.filename
+            Book.updateOne({ _id: id }, { book: book }).then(function () {
                 res.status(200).json({ success: true, msg: "Done" })
             }).catch(function (e) {
                 res.status(201).json({ success: false, msg: "not register" })

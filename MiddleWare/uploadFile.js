@@ -21,5 +21,5 @@ var upload = multer({
     }
   },
   limits: { fileSize: maxSize },
-}).single('file');
+}).single('book');
 module.exports = upload
