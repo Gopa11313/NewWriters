@@ -4,7 +4,7 @@ var storage = multer.diskStorage({
       cb(null, "./public/files");
     },
     filename: function (req, file, cb) {
-      cb(null, Date.now() + 'NewWriters' + file.originalname);
+      cb(null, Date.now() + 'NEWWRITER' + file.originalname);
     },
   });
 const maxSize = 20 * 1024 * 1024; // for 1MB
