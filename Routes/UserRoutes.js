@@ -39,4 +39,30 @@ router.post("/user/add",
             res.status(201).json({ success: false, msg: "Error" })
         }
     })
-    module.exports = router
+
+
+router.post('/user/login', (req, res) => {
+    const body = req.body;
+    User.findOne({ email: body.email }).then(function (userData) {
+        if (userData == null) {
+            return res.status(201).json({ success: false, msg: "Invalid User!!" })
+        }
+        bcrypt.compare(body.password, userData.password, function (err, result) {
+            if (result == false) {
+                return res.status(201).json({ success: false, msg: "Invalid User!" })
+            }
+            User.find({ email: req.body.email }).then(function (data) {
+                const token = jwt.sign({ userId: userData._id }, 'secretkey');
+                console.log(data)
+                res.status(200).json({ success: true, msg: "Login Successfull", token: token, data: data, id: userData._id,role:userData.role })
+            }).catch(function (e) {
+
+            })
+        })
+
+    }).catch(function (e) {
+        res.status(500).json({ success: false, msg: e })
+    })
+})
+
+module.exports = router
