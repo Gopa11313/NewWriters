@@ -28,6 +28,12 @@ const Book = mongoose.model('Book', {
     },
     offer:{
         type:String
+    },
+    date:{
+        type:Date
+    },
+    number_of_sells:{
+        type:Number
     }
 })
 module.exports = Book;
