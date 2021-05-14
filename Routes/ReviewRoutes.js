@@ -10,6 +10,7 @@ const { json } = require('body-parser');
 router.post("/add/review",
     auth.varifyUser,
     (req, res) => {
+        console.log(req.body)
         const req_data=req.body
         const userId=req_data.userId
         const bookId=req_data.bookId
@@ -18,9 +19,20 @@ router.post("/add/review",
         const ratting=req_data.ratting
         var data=Review({userId:userId,bookId:bookId,date:date,review:review,ratting:ratting})
         data.save().then(function () {
-            res.status(200).json({ success: true, msg: "Thank You For Your Review!!" })
+            res.status(200).json({ success: true, msg:"Thank You For Your Review!!" })
         }).catch(function (e) {
             res.status(201).json({ success: false, msg: "Some Error Occurs" })
+        })
+    }
+)
+router.get("/get/all/review",
+    auth.varifyUser,
+    (req, res) => {
+        date = { date: -1 }
+        Review.find().sort(date).then(function (data) {
+            res.status(200).json({ success: true, msg: "Done", data: data })
+        }).catch(function (e) {
+            res.status(201).json({ success: false, msg: "some error" })
         })
     }
 )

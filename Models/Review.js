@@ -9,13 +9,13 @@ const Review = mongoose.model('Review', {
         required: true
     },
     date: {
-        type: String
+        type: Date
     },
     review: {
         type: String
     },
     ratting:{
-        type:Number
+        type:String
     }
 
 })
