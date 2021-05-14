@@ -54,7 +54,7 @@ router.post('/user/login', (req, res) => {
             User.find({ email: req.body.email }).then(function (data) {
                 const token = jwt.sign({ userId: userData._id }, 'secretkey');
                 console.log(data)
-                res.status(200).json({ success: true, msg: "Login Successfull", token: token, data: data, id: userData._id,role:userData.role })
+                res.status(200).json({ success: true, msg: "Login Successfull", token: token, data: data, id: userData._id, role: userData.role })
             }).catch(function (e) {
 
             })
@@ -64,5 +64,16 @@ router.post('/user/login', (req, res) => {
         res.status(500).json({ success: false, msg: e })
     })
 })
+
+router.get("/user/by/:id",
+    auth.varifyUser,
+    (req, res) => {
+        const id=req.params.id
+        User.find({_id:id}).then(function (data) {
+            res.status(200).json({ success: true, data:data,msg: "User Register Success" })
+        }).catch(function (e) {
+            res.status(201).json({ success: false, msg: "Some Error Occurs" })
+        })
+    })
 
 module.exports = router
