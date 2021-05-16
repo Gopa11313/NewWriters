@@ -23,4 +23,32 @@ router.post("/bookmark/book",
         })
     }
 )
+
+router.get("/get/all/bookmark/boook/:userid",
+    auth.varifyUser,
+    (req, res) => {
+        const userId=req.params.userid
+        date = { date: -1 }
+        Bookmark.find({userId:userId}).sort(date).then(function (data) {
+            console.log(data)
+            res.status(200).json({ success: true, msg: "Done", data: data })
+        }).catch(function (e) {
+            res.status(201).json({ success: false, msg: "some error" })
+        })
+    }
+)
+
+router.delete('/delete/bookmark/book/:id',
+    auth.varifyUser,
+    (req, res) => {
+        const _id = req.params.id;
+        console.log(_id)
+        Bookmark.deleteOne({_id:_id}).then(function () {
+            console.log("here")
+            res.status(200).json({ success: true, msg: "Bookmark Successfully deleted" })
+        }).catch(function (e) {
+            res.status(201).json({ success: false, msg: "error" })
+        })
+    })
+
 module.exports = router
