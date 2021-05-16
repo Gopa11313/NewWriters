@@ -25,11 +25,12 @@ router.post("/add/review",
         })
     }
 )
-router.get("/get/all/review",
+router.get("/get/all/review/:bookid",
     auth.varifyUser,
     (req, res) => {
+        const bookId=req.params.bookid
         date = { date: -1 }
-        Review.find().sort(date).then(function (data) {
+        Review.find({bookId:bookId}).sort(date).then(function (data) {
             res.status(200).json({ success: true, msg: "Done", data: data })
         }).catch(function (e) {
             res.status(201).json({ success: false, msg: "some error" })

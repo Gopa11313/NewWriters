@@ -12,4 +12,4 @@ const Bookmark = mongoose.model('Bookmark', {
         type: Date
     }
 })
-module.exports = Review;
+module.exports = Bookmark;
