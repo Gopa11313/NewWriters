@@ -126,5 +126,17 @@ router.get("/get/book/by/:id",
         })
     }
 )
+router.put('/rate/the/note',
+    auth.varifyUser, (req, res) => {
+        const _id = req.body._id
+        const ratting = req.req.ratting
+        const noofRating = req.req.noofRating
+        Book.updateOne({ _id: _id }, { ratting: ratting, noofRating: noofRating }).then(function () {
+            res.status(200).json({ success: true, msg: "Thnak You For Your Ratting" })
+        }).catch(function (e) {
+            res.status(201).json({ success: false, msg: "Somthing went wrong" })
+        })
+    }
+)
 
 module.exports = router

@@ -7,7 +7,7 @@ const { response } = require('express');
 const saltRounds = 10;
 const multer = require("multer");
 const auth = require("../MiddleWare/auth")
-// const upload = require("../middleware/upload")
+const upload = require("../middleware/upload")
 const { check, validationResult } = require('express-validator');
 const { json } = require('body-parser');
 
@@ -68,12 +68,36 @@ router.post('/user/login', (req, res) => {
 router.get("/user/by/:id",
     auth.varifyUser,
     (req, res) => {
-        const id=req.params.id
-        User.find({_id:id}).then(function (data) {
-            res.status(200).json({ success: true, data:data,msg: "User Register Success" })
+        const id = req.params.id
+        User.find({ _id: id }).then(function (data) {
+            res.status(200).json({ success: true, data: data, msg: "User Register Success" })
         }).catch(function (e) {
             res.status(201).json({ success: false, msg: "Some Error Occurs" })
         })
     })
+
+router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
+    const id = req.params.id
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            console.log("here")
+            res.status(201).json({ success: false, msg: "error" })
+        }
+        else if (err) {
+            res.status(201).json({ success: false, msg: "not gonna happen" })
+        }
+        else {
+            const id = req.params.id
+            image = req.file.filename
+            console.log("here")
+            console.log(image)
+            User.updateOne({ _id: id }, { image: image }).then(function () {
+                res.status(200).json({ success: true, msg: "Done" })
+            }).catch(function (e) {
+                res.status(201).json({ success: false, msg: "not register" })
+            })
+        }
+    })
+})
 
 module.exports = router

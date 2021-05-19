@@ -18,10 +18,10 @@ const Book = mongoose.model('Book', {
         type: String
     },
     ratting:{
-        type:Number
+        type:String
     },
     noofRating:{
-        type:Number
+        type:String
     },
     price:{
         type:String
