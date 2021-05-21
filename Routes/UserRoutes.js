@@ -92,7 +92,6 @@ router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
             const id = req.params.id
             image = req.file.filename
             console.log("here")
-            console.log(image)
             User.updateOne({ _id: id }, { image: image }).then(function () {
                 res.status(200).json({ success: true, msg: "Done" })
             }).catch(function (e) {
@@ -121,7 +120,6 @@ router.put("/checked/nightmode/:id",
         const _id=req.params.id
         console.log(_id)
         const night_Mode=req.body.night_Mode
-        console.log(night_Mode)
         User.updateOne({ _id: _id }, { night_Mode: night_Mode }).then(function (data) {
             res.status(200).json({ success: true, msg: "Done"})
         }).catch(function (e) {
