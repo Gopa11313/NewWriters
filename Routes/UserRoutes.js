@@ -27,8 +27,10 @@ router.post("/user/add",
             var password = data1.password
             var image = "noimg"
             var role = "User"
+            var slider=false
+            var night_Mode=false
             const hash = bcrypt.hashSync(password, saltRounds);
-            var data = new User({ name: name, email: email, password: hash, image: image, role: role })
+            var data = new User({ name: name, email: email, password: hash, image: image, role: role ,slider:slider,night_Mode:night_Mode})
             data.save().then(function () {
                 res.status(200).json({ success: true, msg: "User Register Success" })
             }).catch(function (e) {
@@ -54,7 +56,7 @@ router.post('/user/login', (req, res) => {
             User.find({ email: req.body.email }).then(function (data) {
                 const token = jwt.sign({ userId: userData._id }, 'secretkey');
                 console.log(data)
-                res.status(200).json({ success: true, msg: "Login Successfull", token: token, data: data, id: userData._id, role: userData.role })
+                res.status(200).json({ success: true, msg: "Login Successfull", token: token, data: data, id: userData._id, role: userData.role,slider:userData.slider,night_Mode:userData.night_Mode })
             }).catch(function (e) {
 
             })
@@ -100,4 +102,31 @@ router.put("/upload/user/image/:id", auth.varifyUser, (req, res) => {
     })
 })
 
+router.put("/checked/slider/:id",
+    auth.varifyUser,
+    (req, res) => {
+        const _id=req.params.id
+        console.log(_id)
+        const slider=true
+        User.updateOne({ _id: _id }, { slider: slider }).then(function (data) {
+            res.status(200).json({ success: true, msg: "Done"})
+        }).catch(function (e) {
+            res.status(201).json({ success: false, msg: "some error" })
+        })
+    }
+)
+router.put("/checked/nightmode/:id",
+    auth.varifyUser,
+    (req, res) => {
+        const _id=req.params.id
+        console.log(_id)
+        const night_Mode=req.body.night_Mode
+        console.log(night_Mode)
+        User.updateOne({ _id: _id }, { night_Mode: night_Mode }).then(function (data) {
+            res.status(200).json({ success: true, msg: "Done"})
+        }).catch(function (e) {
+            res.status(201).json({ success: false, msg: "some error" })
+        })
+    }
+)
 module.exports = router

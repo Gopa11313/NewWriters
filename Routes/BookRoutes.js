@@ -23,6 +23,7 @@ router.post('/upload/book',
         var noofRating = 0
         var data = new Book({ book: book, cover_page: cover_page, author_name: author_name, book_name: book_name, number_of_sells: number_of_sells, price: price, description: description, ratting: ratting, noofRating: noofRating, offer: offer, date: date })
         data.save().then(function (data) {
+            console.log(data)
             res.status(200).json({ success: true, msg: "Book Successfully uploaded.", id: data._id })
         }).catch(function (e) {
             res.status(201).json({ success: false, msg: "Some Error Occurs" })
@@ -80,7 +81,9 @@ router.get("/get/all/book",
     auth.varifyUser,
     (req, res) => {
         date = { date: -1 }
+        console.log("Here")
         Book.find().sort(date).then(function (data) {
+
             res.status(200).json({ success: true, msg: "Done", data: data })
         }).catch(function (e) {
             res.status(201).json({ success: false, msg: "some error" })
@@ -118,8 +121,9 @@ router.get("/get/book/by/:id",
     auth.varifyUser,
     (req, res) => {
         const id=req.params.id
-        console.log("Here")
+        console.log("here:"+id)
         Book.find({_id:id}).then(function(data){
+            console.log(data)
             res.status(200).json({ success: true, msg: "Done", data: data })
         }).catch(function (e) {
             res.status(201).json({ success: false, msg: "some error" })

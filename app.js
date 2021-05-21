@@ -6,6 +6,7 @@ const User=require("./Routes/UserRoutes")
 const Book=require("./Routes/BookRoutes")
 const Review=require("./Routes/ReviewRoutes")
 const Bookmark=require("./Routes/BookmarkRoutes")
+const Notification=require("./Routes/NotificationRoutes")
 const mongooes=require("./Db/db")
 const app=express();
 app.use(express.static(path.join(__dirname, "public")));
@@ -16,6 +17,7 @@ app.use(User)
 app.use(Book)
 app.use(Review)
 app.use(Bookmark)
+app.use(Notification)
 // app.use(Bookmark)
 // app.use(Comment)
 

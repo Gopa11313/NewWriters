@@ -1,39 +1,49 @@
 const express = require('express');
 const jwt = require('jsonwebtoken')
 const router = express.Router();
-const Review = require('../Models/Review');
+const Notification = require('../Models/Notification');
 const { response, Router } = require('express');
 const auth = require("../MiddleWare/auth")
 const { check, validationResult } = require('express-validator');
 const { json } = require('body-parser');
-const Book = require('../Models/Book');
 
-router.post("/add/review",
+router.post("/notification/add",
     auth.varifyUser,
     (req, res) => {
         console.log(req.body)
         const req_data=req.body
-        const userId=req_data.userId
         const bookId=req_data.bookId
+        const checked=false
         const date=Date.now()
-        const review=req_data.review
-        const ratting=req_data.ratting
-        var data=Review({userId:userId,bookId:bookId,date:date,review:review,ratting:ratting})
+        var data=Notification({bookId:bookId,checked:checked,date:date})
         data.save().then(function () {
-            res.status(200).json({ success: true, msg:"Thank You For Your Review!!" })
+            res.status(200).json({ success: true, msg:"Successfully added notification." })
         }).catch(function (e) {
             res.status(201).json({ success: false, msg: "Some Error Occurs" })
         })
     }
 )
-router.get("/get/all/review/:bookid",
+
+router.get("/get/all/notification",
     auth.varifyUser,
     (req, res) => {
-        const bookId=req.params.bookid
-        console.log(bookId)
         date = { date: -1 }
-        Review.find({bookId:bookId}).sort(date).then(function (data) {
-            console.log("review"+data)
+        Notification.find().sort(date).then(function (data) {
+            res.status(200).json({ success: true, msg: "Done", data: data })
+        }).catch(function (e) {
+            res.status(201).json({ success: false, msg: "some error" })
+        })
+    }
+)
+
+router.put("/checked/notification/:id",
+    auth.varifyUser,
+    (req, res) => {
+        const _id=req.params.id
+        console.log(_id)
+        const checked=true
+        Notification.updateOne({ _id: _id }, { checked: checked }).then(function (data) {
+            console.log("pass")
             res.status(200).json({ success: true, msg: "Done", data: data })
         }).catch(function (e) {
             res.status(201).json({ success: false, msg: "some error" })

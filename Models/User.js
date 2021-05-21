@@ -16,6 +16,12 @@ const Register = mongoose.model('USer', {
     image: {
         type: String
     },
+    slider: {
+        type: Boolean
+    },
+    night_Mode: {
+        type: Boolean
+    },
     role:{
         type:String,
         enum:['User','Admin'],
